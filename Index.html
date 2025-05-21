@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Projeto Animal</title>
+</head>
+<body>
+  <h1>Projeto Animal</h1>
+  <ul id="animal-list"></ul>
+  <button onclick="cadastrarAnimal()">Cadastrar Animal</button>
+
+  <script>
+    const endpoint = 'https://682e496c746f8ca4a47c7bd0.mockapi.io/Animal';
+
+    // Carregar lista de animais
+    async function carregarAnimais() {
+      const response = await fetch(endpoint);
+      const animais = await response.json();
+
+      const lista = document.getElementById('animal-list');
+      lista.innerHTML = '';
+
+      animais.forEach(animal => {
+        const item = document.createElement('li');
+        item.textContent = `${animal.id} - ${animal.Nome} (${animal.Idade}) – ${animal.Raca}`;
+        lista.appendChild(item);
+      });
+    }
+
+    // Cadastrar animal hardcoded
+    async function cadastrarAnimal() {
+      const novoAnimal = {
+        Nome: 'Totó',
+        Idade: 12,
+        Raca: 'cachorro'
+      };
+
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoAnimal)
+      });
+
+      carregarAnimais(); // Atualiza a lista
+    }
+
+    // Inicializar
+    carregarAnimais();
+  </script>
+</body>
+</html>
